@@ -29,7 +29,11 @@ namespace dvcsharp_core_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<GenericDataContext>(options => 
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                {
+                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                    options.EnableSensitiveDataLogging();
+                }
+            );
 
             services.AddCors(options =>
             {
@@ -53,7 +57,10 @@ namespace dvcsharp_core_api
                     };
                 });
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All;
+            });;
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

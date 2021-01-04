@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace dvcsharp_core_api.Models
 {
@@ -23,5 +24,7 @@ namespace dvcsharp_core_api.Models
 
       public string imageUrl;
       public string category;
+      [NotMapped]
+      public dynamic obj { get; set; }
    }
 }

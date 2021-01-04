@@ -37,13 +37,13 @@ dotnet watch run
 * To build a docker image run the following command
 
 ```bash
-docker build -t appsecco/dvcsharp .
+docker build -t dvcsharp .
 ```
 
 * To run the docker container
 
 ```bash
-docker run -d --name dvcsharp -it -p 5000:5000 appsecco/dvcsharp
+docker run -p 5000:5000 dvcsharp
 ```
 
 ## Solution

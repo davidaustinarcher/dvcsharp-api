@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using dvcsharp_core_api.Models;
@@ -51,6 +52,16 @@ namespace dvcsharp_core_api
          return Ok(product);
       }
 
+      [HttpPost("insec")]
+      public IActionResult FromJson([FromBody] Product value)
+      {
+         if (value == null)
+         {
+            return NotFound();
+         }
+         return Ok();
+      }
+
       [HttpGet("export")]
       public void Export()
       {
@@ -79,12 +90,21 @@ namespace dvcsharp_core_api
       [HttpPost("import")]
       public IActionResult Import()
       {
-         XmlReader reader = XmlReader.Create(HttpContext.Request.Body);
+         XmlReaderSettings settings = new XmlReaderSettings();
+         settings.DtdProcessing = System.Xml.DtdProcessing.Parse;
+         settings.XmlResolver = new XmlUrlResolver();
+         XmlReader reader = XmlReader.Create(HttpContext.Request.Body, settings);
+
          XmlRootAttribute root = new XmlRootAttribute("Entities");
          XmlSerializer serializer = new XmlSerializer(typeof(Product[]), root);
 
          var entities = (Product[]) serializer.Deserialize(reader);
          reader.Close();
+
+         entities.ToList().ForEach(p => {
+            _context.Products.Add(p);
+            _context.SaveChanges();
+         });
 
          return Ok(entities);
       }
