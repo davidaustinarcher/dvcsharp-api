@@ -46,6 +46,11 @@ namespace dvcsharp_core_api
             return BadRequest(ModelState);
          }
 
+         if(!product.imageExists()) {
+            ModelState.AddModelError("name", "Image supplied does not exist");
+            return BadRequest(ModelState);
+         }
+
          _context.Products.Add(product);
          _context.SaveChanges();
 
