@@ -40,7 +40,7 @@ namespace dvcsharp_core_api
          var existingProduct = _context.Products.
             Where(b => (b.name == product.name) || (b.skuId == product.skuId)).
             FirstOrDefault();
-         
+
          if(existingProduct != null) {
             ModelState.AddModelError("name", "Product name or skuId is already taken");
             return BadRequest(ModelState);
@@ -58,12 +58,17 @@ namespace dvcsharp_core_api
       }
 
       [HttpPost("insec")]
-      public IActionResult FromJson([FromBody] Product value)
+      public IActionResult FromJson()
       {
-         if (value == null)
+         string json = new StreamReader(Request.Body).ReadToEnd();
+         
+         var product = JsonConvert.DeserializeObject<Product>(json, new JsonSerializerSettings
          {
-            return NotFound();
-         }
+            TypeNameHandling = TypeNameHandling.All
+         });
+
+         _context.Add(product);
+
          return Ok();
       }
 
@@ -112,6 +117,12 @@ namespace dvcsharp_core_api
          });
 
          return Ok(entities);
+      }
+
+      [HttpPost("reset")]
+      public IActionResult Reset() {            
+         var products = _context.Database.ExecuteSqlCommand("DELETE FROM products");
+         return Ok();
       }
    }
 }
