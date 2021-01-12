@@ -69,23 +69,6 @@ resource "azurerm_app_service" "app" {
   }
 }
 
-resource "null_resource" "before" {
-  depends_on = [azurerm_app_service.app]
-}
-
-resource "null_resource" "delay" {
-  provisioner "local-exec" {
-    command = "sleep 40"
-  }
-  triggers = {
-    "before" = null_resource.before.id
-  }
-}
-
-resource "null_resource" "after" {
-  depends_on = [null_resource.delay]
-}
-
 resource "azurerm_template_deployment" "extension" {
   name                = "extension"
   resource_group_name = azurerm_app_service.app.resource_group_name
@@ -98,21 +81,10 @@ resource "azurerm_template_deployment" "extension" {
   }
 
   deployment_mode     = "Incremental"
-  #wait until the app service starts before installing the extension
-  depends_on = [null_resource.delay]
 
   #restart the app service after installing the extension
   provisioner "local-exec" {
     command     = "az webapp restart --name ${azurerm_app_service.app.name} --resource-group ${azurerm_app_service.app.resource_group_name}"      
   }
 
-}
-
-resource "null_resource" "restart" {
-  provisioner "local-exec" {
-    command     = "az webapp restart --name ${azurerm_app_service.app.name} --resource-group ${azurerm_app_service.app.resource_group_name}"      
-  }
-  triggers = {
-    "before" = azurerm_template_deployment.extension.id
-  }
 }
