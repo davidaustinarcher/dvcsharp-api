@@ -6,7 +6,12 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <None Include="appsettings.Production.json" CopyToPublishDirectory="Always" />
   </ItemGroup>
+
+  <Target Name="CopyCustomContentOnPublish" AfterTargets="Publish">
+    <Copy SourceFiles="tmp/DVCSharp.db" DestinationFolder="$(PublishDir)/tmp/" />
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="Contrast.SensorsNetCore" Version="1.7.2" />

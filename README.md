@@ -16,6 +16,7 @@ Install .NET Core 2.x SDK
 Install dependencies and migrate database:
 
 ```
+dotnet tool install --global dotnet-ef
 dotnet restore
 dotnet ef database update
 ```

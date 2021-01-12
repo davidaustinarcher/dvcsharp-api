@@ -76,3 +76,4 @@ _[Ss]cripts
 
 tmp/*.db
 contrast_security.yaml
+.terraform.lock.hcl
