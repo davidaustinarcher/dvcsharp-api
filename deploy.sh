@@ -16,7 +16,4 @@ zip -r -X "deploy.zip" ./*
 #Deploy the app
 az webapp deployment source config-zip --resource-group $resourcegroupname --name $webappname --src ./deploy.zip
 
-#Restart the app service (to enable Contrast)
-az webapp restart --name $webappname --resource-group $resourcegroupname
-
 echo "Deploy complete."

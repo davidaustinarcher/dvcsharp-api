@@ -1,0 +1,6 @@
+contrast_security.yaml
+.terraform
+.vscode
+.git
+logs
+*.tf
