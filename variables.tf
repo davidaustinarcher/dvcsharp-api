@@ -10,7 +10,7 @@ variable "location" {
 
 variable "appname" {
   description = "The name of the app to display in Contrast TeamServer. Also used for DNS, so no spaces please!"
-  default     = "dvcsharp"
+  default     = "dvcsharp-api"
 }
 
 variable "servername" {
@@ -20,7 +20,7 @@ variable "servername" {
 
 variable "environment" {
   description = "The Contrast environment for the app. Valid values: development, qa or production"
-  default     = "development"
+  default     = "Production"
 }
 
 variable "session_metadata" {
